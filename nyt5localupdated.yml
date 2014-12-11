@@ -1,0 +1,68 @@
+# ~/.tmuxinator/nyt5local.yml
+
+name: nyt5localupdated
+root: ~/
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+# pre: sbx on
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+windows:
+  - git:
+      layout: tiled
+      panes:
+        - git_foundation:
+          - sbx
+          - cd nyt5-foundation
+        - git_shared:
+          - sbx
+          - cd nyt5-shared
+        - git_article:
+          - sbx
+          - cd nyt5-app-article
+        - git_sandbox:
+          - cd /opt/nyt/sbx
+  - sbxlogs:
+      layout: even-vertical
+      panes:
+        - sbx_error_log:
+          - sbx ssh
+          - tail -f /var/nyt/logs/apache/error_log
+        - sbx_php_log:
+          - sbx ssh
+          - tail -f /var/nyt/logs/apache/php.log
+  - monitor:
+      layout: tiled
+      panes:
+        - sbx_src:
+          - sbx ssh
+          - cd /opt/nyt/www/src
+        - sbx_build_log:
+          - sbx ssh
+          - tail -f /tmp/grunt-dev.out
+        - sbx_top:
+          - sbx ssh
+          - top
+        - mac_top:
+          - top
+  - local:
+      layout: main-vertical
+      panes:
+        - echo "hello"
+  - local:
+      layout: main-vertical
+      panes:
+        - echo "hello"
+  - local:
+      layout: main-vertical
+      panes:
+        - echo "hello"
