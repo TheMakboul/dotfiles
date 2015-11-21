@@ -1,0 +1,101 @@
+name: nyt5
+root: ~/
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+# pre: sbx on
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+windows:
+  - gitrepos:
+      layout: tiled
+      panes:
+        - git_foundation:
+          - sbx
+          - cd nyt5-foundation
+          - git status
+        - git_shared:
+          - sbx
+          - cd nyt5-shared
+          - git status
+        - git_error:
+          - sbx
+          - cd nyt5-app-error
+          - git status
+        - git_collection:
+          - sbx
+          - cd nyt5-app-collection
+          - git status
+  - moargitrepos:
+      layout: tiled
+      panes:
+        - git_devtools:
+          - sbx
+          - cd nyt5-devtools
+          - git status
+        - git_wp_flags:
+          - sbx
+          - cd web-products-flags-config
+          - git status
+        - git_build:
+          - sbx
+          - cd nyt5-build
+          - git status
+        - git_sandbox:
+          - cd /opt/nyt/sbx
+          - git status
+  - sbxlogs:
+      layout: even-vertical
+      panes:
+        - sbx_error_log:
+          - sbx ssh
+          - tail -f /var/nyt/logs/apache/error_log
+        - sbx_php_log:
+          - sbx ssh
+          - tail -f /var/nyt/logs/apache/php.log
+  - buildmonitor:
+      layout: tiled
+      panes:
+        - sbx_filechange_log:
+          - sbx ssh
+          - tail -f /opt/nyt/www/src/nyt/messages/filechangelog.out
+        - sbx_build_log:
+          - sbx ssh
+          - tail -f /opt/nyt/www/src/nyt/messages/buildlog.out
+        - mac_filechange_log:
+          - sbx ssh
+          - tail -f /opt/nyt/www/src/nyt/messages/watchserverlog.out
+        - mac_build_log:
+          - sbx ssh
+  - perfmonitor:
+      layout: tiled
+      panes:
+        - awesomeness_to_come:
+          - echo "hello"
+        - awesomeness_to_come:
+          - echo "hello"
+        - sbx_top:
+          - sbx ssh
+          - top
+        - mac_top:
+          - top
+  - local:
+      layout: main-vertical
+      panes:
+        - echo "hello"
+  - local:
+      layout: main-vertical
+      panes:
+        - echo "hello"
+  - local:
+      layout: main-vertical
+      panes:
+        - echo "hello"
